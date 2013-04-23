@@ -22,21 +22,75 @@
         <meta charset="utf-8" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+                
+        <!-- jQuery mobile -->
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
+        
         <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
+
+        <title>Reboot</title>
     </head>
     <body>
         <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+            <div id="deviceready">
+                
+                <div data-role="navbar" class="header">
+                    <h1>Reboot1</h1>
+                </div><!-- /navbar -->
+                
+                <!-- Début première page -->
+                <div data-role="page" id="page1">
+                    
+                    <div data-role="content">
+                        <img id="ami" src="img/ami.png" />
+                        <p>I'm first in the source order so I'm shown as the page.</p>
+                        <p>View internal page called <a href="#bar">bar</a></p>
+                    </div><!-- /content -->
+            
+                </div><!-- /page -->
+                
+                <!-- Début seconde page -->
+                <div data-role="page" id="page2">
+                    
+                    <div data-role="content">
+                        <p>View internal page called <a href="#bar">bar</a></p>
+                    </div><!-- /content -->
+                    
+                </div><!-- /page -->
+            
             </div>
         </div>
         <script type="text/javascript" src="cordova-2.6.0.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
+        <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+        <script src="js/swipeupdown.js"></script>
+        
         <script type="text/javascript">
             app.initialize();
+            
+            currentPage = 1;
+            
+            $(document).bind ("pageinit", function (){
+                $(".app").bind ("vmousedown", function (event){
+                    currentPage += 1;
+                    nextPage = "#page"+currentPage;
+                    $.mobile.changePage( nextPage, { transition: "slideup"} );
+                });
+            });
+            
+            $(document).bind ("pageinit", function (){
+                $(".app").bind ("vmouseup", function (event){
+                    currentPage -= 1;
+                    nextPage = "#page"+currentPage;
+                    $.mobile.changePage( nextPage, { transition: "slideup"} );
+                });
+            });
+            
+            // Permet d'éviter de pouvoir scroller dans la page
+            $(document).bind("vmousedown",function(event){
+                event.preventDefault();
+            });
         </script>
     </body>
 </html>
