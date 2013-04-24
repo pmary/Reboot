@@ -39,24 +39,25 @@
                 </div><!-- /navbar -->
                 
                 <!-- Début première page -->
-                <div data-role="page" id="page1">
+                <div data-role="page" id="page1" class="page">
                     
                     <div data-role="content">
                         <img id="ami" src="img/ami.png" />
-                        <p>I'm first in the source order so I'm shown as the page.</p>
-                        <p>View internal page called <a href="#bar">bar</a></p>
+                        <div id="ami-dialogue">
+                            <p>Led ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae.</p>
+                        </div>
                     </div><!-- /content -->
             
-                </div><!-- /page -->
+                </div><!-- /page1 -->
                 
                 <!-- Début seconde page -->
-                <div data-role="page" id="page2">
+                <div data-role="page" id="page2" class="page">
                     
                     <div data-role="content">
-                        <p>View internal page called <a href="#bar">bar</a></p>
+                        <img id="sablier" src="img/sablier.png" />
                     </div><!-- /content -->
                     
-                </div><!-- /page -->
+                </div><!-- /page2 -->
             
             </div>
         </div>
@@ -69,21 +70,46 @@
         <script type="text/javascript">
             app.initialize();
             
-            currentPage = 1;
+            var currentPage = 1;
+            
+            function changePage(action){
+                var minPage = 1;
+                var maxPage = 2;
+                var nextPage = currentPage;
+                
+                if(action == 'down' && currentPage > minPage){
+                    currentPage -= 1;
+                }else if(action == 'up' && currentPage < maxPage){
+                    currentPage += 1;
+                }
+                
+                nextPage = "#page"+currentPage;
+
+                // Changement du titre du header suivant la page affichée
+                switch(currentPage){
+                    case 1 :
+                        $('.header>h1').html('Reboot1');
+                    break;
+                    case 2 :
+                        $('.header>h1').html('Reboot2');
+                    break;
+                    default:
+                        $('.header>h1').html('Reboot');
+                    break;
+                }
+                
+                return nextPage;
+            }
             
             $(document).bind ("pageinit", function (){
-                $(".app").bind ("vmousedown", function (event){
-                    currentPage += 1;
-                    nextPage = "#page"+currentPage;
-                    $.mobile.changePage( nextPage, { transition: "slideup"} );
+                $(".app").bind ("swipeup", function (event){
+                    $.mobile.changePage( changePage('up'), { transition: "slideup"} );
                 });
             });
             
             $(document).bind ("pageinit", function (){
-                $(".app").bind ("vmouseup", function (event){
-                    currentPage -= 1;
-                    nextPage = "#page"+currentPage;
-                    $.mobile.changePage( nextPage, { transition: "slideup"} );
+                $(".app").bind ("swipedown", function (event){
+                    $.mobile.changePage( changePage('down'), { transition: "slidedown"} );
                 });
             });
             
